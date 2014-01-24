@@ -1,0 +1,30 @@
+
+:javascript
+  code=#{@code_1}
+  $.ajax({
+  url: "/welcome/login/"+code,
+  method:'get',
+  success: success_call_back,
+  error:error_call_back})
+
+  function success_call_back(result) {
+      if (result==true){
+      window.location.href="http://192.168.1.182:3000/welcome/show"
+      }else{
+      console.log(result)
+          $.ajax({
+            url: "/welcome/login/"+code,
+            method:'get',
+            success: success_call_back,
+            error:error_call_back})
+      }
+  }
+  function error_call_back(error) {
+   console.log("22")
+  }
+.div-img
+  .img
+    %img(src="http://qr.liantu.com/api.php?text=#{@url}")
+  .span-1
+    %h1
+      页面登陆版

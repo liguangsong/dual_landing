@@ -1,0 +1,62 @@
+:javascript
+  code=#{@code}
+  $.ajax({
+  url: "/welcome/login/"+code,
+  method:'get',
+  success: success_call_back,
+  error:error_call_back})
+
+  function success_call_back(result) {
+      if (result==true){
+          $.ajax({
+            url: "/welcome/login/"+code,
+            method:'get',
+            success: success_call_back,
+            error:error_call_back})
+      }else{
+      window.location.href="http://192.168.1.182:3000/welcome/index"
+      }
+  }
+  function error_call_back(error) {
+   console.log("连接失败")
+  }
+=@message
+%h1
+  活动通
+%p(class="header-right"style="margin-top:1%")
+  你好，
+  =@user["name"]
+  =link_to '退出'
+%div(class="index-action user-show-div-1" )
+  %div(class="user-result" )
+    %span(class="header-left user-header-left")
+      活动信息
+  %div(class="header-right user-header-right")
+    %button(disabled='@disabled')
+      =link_to "同步展示"
+  %table(class="table table-style user-table" )
+    %tbody
+      %tr
+        %th 编号
+        %th 活动名称
+        %th 报名人数
+        %th 竞价次数
+      %br
+        %ul
+          -i=0
+          -@activity.each do |t|
+            %tr
+              -i=i+1;
+              %th
+                =i
+              %th
+                =link_to t["activity_name"]
+              %th
+                =link_to t['sign_up_number']
+              %th
+                =link_to t['bid_number']
+            %br
+      %div(class="will_paginate-div")
+        %div(class="will-paginate")
+          =will_paginate@activity ,{:previous_label =>'<<',:next_label => '>>'}
+
